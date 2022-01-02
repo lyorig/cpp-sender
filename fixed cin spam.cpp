@@ -17,7 +17,7 @@ int main() {
     setlocale(LC_ALL, "cs_CZ");
     system("Color 0E");
     
-    cout << "Chcete zmìnit pokroèilá nastavení? (ano/ne): ";
+    cout << "Chcete editovat nastavení? (ano/ne): ";
     cin >> ans;
 
     if (ans == "ano") {
