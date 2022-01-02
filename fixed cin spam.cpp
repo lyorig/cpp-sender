@@ -39,7 +39,7 @@ int main() {
     SetConsoleCP(codepage);
     cout << "Codepage nastaven na " << codepage << ".\n\n";
 
-    cout << "(c) Petr Šácha 2022. Podporuje znaky.\n";
+    cout << "(c) Petr Šácha 2022. Podporuje diakritiku.\n";
     cout << "Použitím programu souhlasíte se samostatností Míkovic.\n";
     cout << "Co chcete spamovat? -> ";
     
