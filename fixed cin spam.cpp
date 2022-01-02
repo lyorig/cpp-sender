@@ -15,22 +15,22 @@ int main() {
     UINT codepage;
 
     setlocale(LC_ALL, "cs_CZ");
-    system("Color 0E"); // Žlutá - musí se nastavit parametry
+    system("Color 0E");
     
-    cout << "Chcete zmìnit pokroèilá nastavení? (ano/ne): ";
+    cout << "Chcete zmÃ¬nit pokroÃ¨ilÃ¡ nastavenÃ­? (ano/ne): ";
     cin >> ans;
 
     if (ans == "ano") {
 
-        cout << "\nProdleva mezi repeticemi (ms): "; // 30ms je rozumné ale mùže také zpùsobit problémy pøi delším spamu
+        cout << "\nProdleva mezi repeticemi (ms): ";
         cin >> delay;
         cout << "Prodleva nastavena na " << delay << "ms.\n\n";
 
-        cout << "Codepage: "; // Pokud uživatel chce z nìjakého dùvodu nìmecké, francouzské znaky atd.
+        cout << "Codepage: ";
         cin >> codepage;
 
     }
-    else { // Cokoliv jiného než "ano" se bere jako ne
+    else { // Cokoliv jinÃ©ho neÅ¾ "ano" se bere jako ne
         delay = 30;
         cout << "\nProdleva nastavena na 30ms.\n";
         codepage = 1250;
@@ -39,17 +39,17 @@ int main() {
     SetConsoleCP(codepage);
     cout << "Codepage nastaven na " << codepage << ".\n\n";
 
-    cout << "(c) Petr Šácha 2022. Mìlo by podporovat èeské znaky.\n";
-    cout << "Použitím programu souhlasíte se samostatností Míkovic.\n";
+    cout << "(c) Petr Å Ã¡cha 2022. Podporuje znaky.\n";
+    cout << "PouÅ¾itÃ­m programu souhlasÃ­te se samostatnostÃ­ MÃ­kovic.\n";
     cout << "Co chcete spamovat? -> ";
     
     
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // jinak bude kvùli pøedchozímu cin-u pøeskoèen getline
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // jinak nebude kvÅ¯li cin-u fungovat getline
     getline(wcin, wts);
 
-    system("Color 0A"); // Zelená - program je pøipraven
+    system("Color 0A"); // ZelenÃ¡ - program je ready
 
-    cout << "\nPøipraveno. Držte F12 pro spam.\n"; 
+    cout << "\nHotovo. DrÅ¾te F12 pro spam.\n"; 
     
     while(true) {
         
