@@ -16,7 +16,7 @@ int main() {
     string locale;
 
     setlocale(LC_ALL, "cs_CZ");
-    system("Color 0E");
+    system("Color 0E"); // Žlutá
     
     cout << "Chcete editovat nastavení? (ano/ne): ";
     cin >> ans;
@@ -36,14 +36,14 @@ int main() {
     }
     else { // Cokoliv jiného než "ano" se bere jako ne
         delay = 30;
-        cout << "\nProdleva nastavena na základních " << delay << "ms.\n";
+        cout << "\nProdleva nastavena na základní (" << delay << "ms).\n";
         codepage = 1250;
         locale = "cs_CZ";
     }
     setlocale(LC_ALL, locale);
-    cout << "Locale nastaven na základní " << locale << ".\n";
+    cout << "Locale nastaven na základní (" << locale << ").\n";
     SetConsoleCP(codepage);
-    cout << "Codepage nastaven na základní " << codepage << ".\n\n";
+    cout << "Codepage nastaven na základní (" << codepage << ").\n\n";
 
     cout << "(c) Petr Šácha 2022. Podporuje diakritiku.\n";
     cout << "Použitím programu souhlasíte se samostatností Míkovic.\n";
@@ -53,7 +53,7 @@ int main() {
     cin.ignore(numeric_limits<streamsize>::max(), '\n'); // jinak nebude kvůli cin-u fungovat getline
     getline(wcin, wts);
 
-    system("Color 0A"); // Zelená - program je ready
+    system("Color 0A"); // Zelená
 
     cout << "\nHotovo. Držte F12 pro spam.\n"; 
     
