@@ -13,6 +13,7 @@ int main() {
     
     string ans;
     UINT codepage;
+    string locale;
 
     setlocale(LC_ALL, "cs_CZ");
     system("Color 0E");
@@ -28,14 +29,19 @@ int main() {
 
         cout << "Codepage: ";
         cin >> codepage;
+        
+        cout << "Locale: ";
+        cin >> locale;
 
     }
     else { // Cokoliv jiného než "ano" se bere jako ne
         delay = 30;
         cout << "\nProdleva nastavena na 30ms.\n";
         codepage = 1250;
+        locale = "cs_CZ";
     }
-    
+    setlocale(LC_ALL, locale);
+    cout << Locale nastaven na << locale << ".\n";
     SetConsoleCP(codepage);
     cout << "Codepage nastaven na " << codepage << ".\n\n";
 
