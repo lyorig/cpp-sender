@@ -36,14 +36,14 @@ int main() {
     }
     else { // Cokoliv jiného než "ano" se bere jako ne
         delay = 30;
-        cout << "\nProdleva nastavena na 30ms.\n";
+        cout << "\nProdleva nastavena na základních " << delay << "ms.\n";
         codepage = 1250;
         locale = "cs_CZ";
     }
     setlocale(LC_ALL, locale);
-    cout << Locale nastaven na << locale << ".\n";
+    cout << "Locale nastaven na základní " << locale << ".\n";
     SetConsoleCP(codepage);
-    cout << "Codepage nastaven na " << codepage << ".\n\n";
+    cout << "Codepage nastaven na základní " << codepage << ".\n\n";
 
     cout << "(c) Petr Šácha 2022. Podporuje diakritiku.\n";
     cout << "Použitím programu souhlasíte se samostatností Míkovic.\n";
