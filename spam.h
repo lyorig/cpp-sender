@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <string>
 #include <locale>
@@ -59,11 +60,23 @@ void sendText() {
     Sleep(delay);
 }
 
-void flushCin(string response) {
+void flushCin() {
     
     cin.clear();
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
 
-    cout << response << "\n";
+void setColor(WORD msgColor) {
+    
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, msgColor);
+}
 
+void printColoredMsg(WORD msgColor, string msg, WORD nextColor) {
+    
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    SetConsoleTextAttribute(hConsole, msgColor);
+    cout << msg;
+    SetConsoleTextAttribute(hConsole, nextColor);
 }

@@ -1,9 +1,8 @@
 #define NOMINMAX
-#define WHITE FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE
-#define YELLOW FOREGROUND_RED | FOREGROUND_GREEN
-#define B_RED FOREGROUND_RED | FOREGROUND_INTENSITY
-#define B_GREEN FOREGROUND_GREEN | FOREGROUND_INTENSITY
-#define B_BLUE FOREGROUND_BLUE | FOREGROUND_INTENSITY
+#define B_GREEN 10
+#define USERINPUT 11
+#define B_RED 12
+#define WHITE 15
 
 #include <iostream>
 #include <string>
@@ -16,90 +15,98 @@ using namespace std;
 
 int main() {
     
-    // Promìnné
+    // Promìnné a jejich základní hodnoty
     string ans;
     UINT codepage = 1250;
-    string sLocale;
+    string sLocale = "cs_CZ";
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    delay = 30;
 
+    
+    
     // Základní nastavení
     setlocale(LC_ALL, "cs_CZ");
     SetConsoleCP(1250);
-    SetConsoleTextAttribute(hConsole, B_RED);
     
-    cout << "Editovat adv. nastavení? (ano/ne): ";
+    printColoredMsg(WHITE, "Chcete upravit nastavení? (ano/ne): ", USERINPUT);
     cin >> ans;
 
+    
+    
+    
     if (ans == "ano") {
 
     Q1:
-        cout << "\nProdleva mezi repeticemi (ms): ";
+        printColoredMsg(WHITE, "\nProdleva mezi repeticemi (ms): ", USERINPUT);
         cin >> delay;
         
             if (!cin) {
             
-                flushCin("Neplatná prodleva. Zadejte jinou.");
+                flushCin();
+                printColoredMsg(B_RED, "Neplatná prodleva. Zadejte jinou.\n", WHITE);
                 goto Q1;
-
             }
+
+
+
     Q2:
-        cout << "\nCodepage: ";
+        printColoredMsg(WHITE, "\nCodepage: ", USERINPUT);
         cin >> codepage;
 
             if (!cin) {
 
-                flushCin("Neplatný codepage. Zadejte jiný.");
+                flushCin();
+                printColoredMsg(B_RED, "Neplatný codepage. Zadejte jiný.\n", WHITE);
                 goto Q2;
-
             }
+
+
+
     Q3:
-        cout << "\nLocale: ";
+        printColoredMsg(WHITE, "\nLocale: ", USERINPUT);
         cin >> sLocale;
 
-            if (!cin || sLocale.length() < 4 || sLocale.length() > 10) {
+            if (!cin || sLocale.length() < 4 || sLocale.length() > 10) { // Locale mùže být i 10 znakù dlouhý, tak pro jistotu
 
-                flushCin("Neplatný locale. Zadejte jiný.");
+                flushCin();
+                printColoredMsg(B_RED, "Neplatný locale. Zadejte jiný.\n", WHITE);
                 goto Q3;
-
             }
             
-            SetConsoleTextAttribute(hConsole, B_GREEN);
-            cout << "\nNastaveno.\n";
+            printColoredMsg(B_GREEN, "\nNastaveno.\n", WHITE); // Lež
     }
-    else { // Cokoliv jiného než "ano" se bere jako ne
-        
-        delay = 30;
-        codepage = 1250;
-        sLocale = "cs_CZ";
 
-        SetConsoleTextAttribute(hConsole, B_GREEN);
+
+
+    else { // Cokoliv jiného než "ano" se bere jako ne
+
+        setColor(B_GREEN);
         cout << "\nProdleva nastavena na základní (" << delay << "ms).\n";
         cout << "Locale nastaven na základní (" << sLocale << ").\n";
-        cout << "Codepage nastaven na základní (" << codepage << ").\n";
-
+        cout << "Codepage nastaven na základní (" << codepage << ").\n"; // Také lži. Ne, neplánuji s tím nic dìlat
     }
+
+
+
 
     setlocale(LC_ALL, sLocale.c_str());
     SetConsoleCP(codepage);
     
-    SetConsoleTextAttribute(hConsole, WHITE);
-    cout << "\n(c) Petr Šácha 2022. Podporuje diakritiku.\n";
-    cout << "Použitím programu souhlasíte se samostatností Míkovic.\n";
-    cout << "Co chcete spamovat? -> ";
+    printColoredMsg(WHITE, "\n(c) Petr Šácha 2022. Podporuje diakritiku.\nPoužitím programu souhlasíte se samostatností Míkovic.\nCo chcete spamovat? -> ", USERINPUT);
     
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // jinak nebude kvùli cin-u fungovat getline
+    flushCin();
     getline(wcin, wts);
 
-    SetConsoleTextAttribute(hConsole, B_GREEN);
-    cout << "\nHotovo. Držte F12 pro spam.\n"; 
+    printColoredMsg(B_GREEN, "\nHotovo. Držte F12 pro spam.\n", WHITE);
+    
+    
+    
     
     while(true) {
         
         if (GetKeyState(VK_F12) & 0x8000) {
             sendText();
-        }
-        
+        }  
     }
-    SetConsoleTextAttribute(hConsole, WHITE);
     return 0;
 }
