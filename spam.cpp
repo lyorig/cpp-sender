@@ -1,7 +1,9 @@
 #define NOMINMAX
 #define WHITE FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE
 #define YELLOW FOREGROUND_RED | FOREGROUND_GREEN
-#define BGREEN FOREGROUND_GREEN | FOREGROUND_INTENSITY
+#define B_RED FOREGROUND_RED | FOREGROUND_INTENSITY
+#define B_GREEN FOREGROUND_GREEN | FOREGROUND_INTENSITY
+#define B_BLUE FOREGROUND_BLUE | FOREGROUND_INTENSITY
 
 #include <iostream>
 #include <string>
@@ -14,54 +16,82 @@ using namespace std;
 
 int main() {
     
+    // Promìnné
     string ans;
-    UINT codepage;
+    UINT codepage = 1250;
     string sLocale;
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
+    // Základní nastavení
     setlocale(LC_ALL, "cs_CZ");
-    SetConsoleTextAttribute(hConsole, YELLOW);
+    SetConsoleCP(1250);
+    SetConsoleTextAttribute(hConsole, B_RED);
     
-    cout << "Chcete editovat nastavenÃ­? (ano/ne): ";
+    cout << "Editovat adv. nastavení? (ano/ne): ";
     cin >> ans;
 
     if (ans == "ano") {
 
+    Q1:
         cout << "\nProdleva mezi repeticemi (ms): ";
         cin >> delay;
-        cout << "Prodleva nastavena na zÃ¡kladnÃ­ (" << delay << ")ms.\n\n";
-
-        cout << "Codepage: ";
-        cin >> codepage;
         
-        cout << "Locale: ";
-        cin >> sLocale; 
+            if (!cin) {
+            
+                flushCin("Neplatná prodleva. Zadejte jinou.");
+                goto Q1;
 
+            }
+    Q2:
+        cout << "\nCodepage: ";
+        cin >> codepage;
+
+            if (!cin) {
+
+                flushCin("Neplatný codepage. Zadejte jiný.");
+                goto Q2;
+
+            }
+    Q3:
+        cout << "\nLocale: ";
+        cin >> sLocale;
+
+            if (!cin || sLocale.length() < 4 || sLocale.length() > 10) {
+
+                flushCin("Neplatný locale. Zadejte jiný.");
+                goto Q3;
+
+            }
+            
+            SetConsoleTextAttribute(hConsole, B_GREEN);
+            cout << "\nNastaveno.\n";
     }
-    else { // Cokoliv jinÃ©ho neÅ¾ "ano" se bere jako ne
+    else { // Cokoliv jiného než "ano" se bere jako ne
         
         delay = 30;
-        cout << "\nProdleva nastavena na zÃ¡kladnÃ­ (" << delay << "ms).\n";
-
         codepage = 1250;
-        locale = "cs_CZ";
+        sLocale = "cs_CZ";
+
+        SetConsoleTextAttribute(hConsole, B_GREEN);
+        cout << "\nProdleva nastavena na základní (" << delay << "ms).\n";
+        cout << "Locale nastaven na základní (" << sLocale << ").\n";
+        cout << "Codepage nastaven na základní (" << codepage << ").\n";
 
     }
-    setlocale(LC_ALL, sLocale);
-    cout << "Locale nastaven na zÃ¡kladnÃ­ (" << sLocale << ").\n";
-    SetConsoleCP(codepage);
-    cout << "Codepage nastaven na zÃ¡kladnÃ­ (" << codepage << ").\n\n";
 
-    cout << "(c) Petr Å Ã¡cha 2022. Podporuje diakritiku.\n";
-    cout << "PouÅ¾itÃ­m programu souhlasÃ­te se samostatnostÃ­ MÃ­kovic.\n";
+    setlocale(LC_ALL, sLocale.c_str());
+    SetConsoleCP(codepage);
+    
+    SetConsoleTextAttribute(hConsole, WHITE);
+    cout << "\n(c) Petr Šácha 2022. Podporuje diakritiku.\n";
+    cout << "Použitím programu souhlasíte se samostatností Míkovic.\n";
     cout << "Co chcete spamovat? -> ";
     
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // jinak nebude kvÅ¯li cin-u fungovat getline
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // jinak nebude kvùli cin-u fungovat getline
     getline(wcin, wts);
 
-    SetConsoleTextAttribute(hConsole, BGREEN);
-
-    cout << "\nHotovo. DrÅ¾te F12 pro spam.\n"; 
+    SetConsoleTextAttribute(hConsole, B_GREEN);
+    cout << "\nHotovo. Držte F12 pro spam.\n"; 
     
     while(true) {
         

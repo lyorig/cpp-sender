@@ -4,13 +4,13 @@
 #include <locale>
 #include <Windows.h>
 
-std::wstring wts;
+using namespace std;
+
+wstring wts;
 int delay;
 
 void sendText() {
-
-    
-    
+ 
     INPUT enter;
     enter.ki.wVk = 0x0D;
     enter.type = INPUT_KEYBOARD;
@@ -57,4 +57,13 @@ void sendText() {
     SendInput(1, &enter, sizeof(INPUT));
 
     Sleep(delay);
+}
+
+void flushCin(string response) {
+    
+    cin.clear();
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    cout << response << "\n";
+
 }
