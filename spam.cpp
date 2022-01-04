@@ -25,7 +25,7 @@ int main() {
     
     
     // Základní nastavení
-    SetConsoleTitleA(chooseRandElem(titleText).c_str()); // Narrow string protože se mi nechce dìlat funkce na pøevod
+    SetConsoleTitleW(chooseRandElem(titleText).c_str());
     setlocale(LC_ALL, "cs_CZ");
     SetConsoleCP(1250);
     
@@ -83,9 +83,9 @@ int main() {
 
         setColor(B_GREEN);
 
-        cout << "\nProdleva nastavena na základní (" << delay << "ms).\n";
-        cout << "Locale nastaven na základní (" << sLocale << ").\n";
-        cout << "Codepage nastaven na základní (" << codepage << ").\n"; // Také lži. Ne, neplánuji s tím nic dìlat
+        cout << "\nProdleva nastavena na doporuèenou (" << delay << "ms).\n";
+        cout << "Locale nastaven na doporuèený (" << sLocale << ").\n";
+        cout << "Codepage nastaven na doporuèený (" << codepage << ").\n"; // Také lži. Ne, neplánuji s tím nic dìlat
     }
 
 
