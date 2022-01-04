@@ -30,8 +30,9 @@ int main() {
     SetConsoleCP(1250);
     
     setColor(WHITE);
-    cout << "(c) Petr Šácha 2022. " << chooseRandElem(splashText) << "\nPoužitím programu souhlasíte se samostatností Míkovic.\n\n";
-    
+    cout << "(c) Petr Šácha 2022. ";
+    printRainbowMsg(9, chooseRandElem(splashText), WHITE);
+    cout << "\nPoužitím èi modifikací programu souhlasíte se samostatností Míkovic.\n\n";
     printColoredMsg(WHITE, "Chcete upravit nastavení? (ano/ne): ", USERINPUT);
     cin >> ans;
 
@@ -42,7 +43,7 @@ int main() {
 
     if (ans == "ano") {
 
-    Q1:
+    Q1A:
         printColoredMsg(WHITE, "\nProdleva mezi repeticemi (ms): ", USERINPUT);
         cin >> delay;
 
@@ -50,7 +51,20 @@ int main() {
 
             flushCin();
             printColoredMsg(FAILURE, "Neplatná prodleva. Zadejte jinou.\n", WHITE);
-            goto Q1;
+            goto Q1A;
+        }
+
+
+    
+    Q1B:
+        printColoredMsg(WHITE, "\nProdleva mezi stiskem a odesláním klávesy (ms): ", USERINPUT);
+        cin >> inbDelay;
+
+        if (!cin || inbDelay < 0 || inbDelay > 1000) {
+
+            flushCin();
+            printColoredMsg(FAILURE, "Neplatná prodleva. Zadejte jinou.\n", WHITE);
+            goto Q1B;
         }
 
 
@@ -79,7 +93,7 @@ int main() {
             goto Q3;
         }
 
-        printColoredMsg(SUCCESS, "\nNastaveno.\n", WHITE); // Lež
+        printColoredMsg(SUCCESS, "\nNastaveno.\n", WHITE); // Lež! Pøece to bude nastaveno až o nìkolik øádkù pozdìji
     }
 
 
@@ -89,8 +103,9 @@ int main() {
         setColor(SUCCESS);
 
         cout << "\nProdleva nastavena na doporuèenou (" << delay << "ms).\n";
+        cout << "Prodleva mezi stiskem a odesláním klávesy nastavena na doporuèenou (" << inbDelay << "ms).\n";
         cout << "Locale nastaven na doporuèený (" << sLocale << ").\n";
-        cout << "Codepage nastaven na doporuèený (" << codepage << ").\n"; // Také lži. Ne, neplánuji s tím nic dìlat
+        cout << "Codepage nastaven na doporuèený (" << codepage << ").\n"; // Další lži! Tyto jsou alespoò o hodnì øádkù blíž
     }
 
     setlocale(LC_ALL, sLocale.c_str());

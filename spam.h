@@ -11,7 +11,9 @@ using namespace std;
 
 // Promìnné
 wstring wts;
-int delay;
+int delay = 30;
+int inbDelay = 0;
+HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 // Arrays
 vector<string> splashText = { "Le fishe au chocolat.", "Napajedla neexistují.", "Praise Gabèa.", "Python je cringe.", "Garance špagetového kódu.", "Schváleno Kuncišem.", "Spamujte s tím Hendrycha.", "Isn't it?", "Nenávidím tento jazyk.", "Poøád stabilnìjší než Fallout 76.", "Amogus sus." };
@@ -54,14 +56,18 @@ void sendText() {
         shift.ki.dwFlags = KEYEVENTF_KEYUP;
         alt.ki.dwFlags = KEYEVENTF_KEYUP;
 
+        Sleep(inbDelay);
         SendInput(1, &input, sizeof(INPUT));
+        Sleep(inbDelay);
         SendInput(1, &shift, sizeof(INPUT));
+        Sleep(inbDelay);
         SendInput(1, &alt, sizeof(INPUT));
 
     }
 
     SendInput(1, &enter, sizeof(INPUT));
     enter.ki.dwFlags = KEYEVENTF_KEYUP;
+    Sleep(inbDelay);
     SendInput(1, &enter, sizeof(INPUT));
 
     Sleep(delay);
@@ -75,16 +81,33 @@ void flushCin() {
 
 void setColor(WORD msgColor) {
     
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, msgColor);
+    SetConsoleTextAttribute(hConsole, msgColor); // Toto mi usnadní práci jen minimálnì, ale je to i tak užiteèné
 }
 
 void printColoredMsg(WORD msgColor, string msg, WORD nextColor) {
-    
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
     SetConsoleTextAttribute(hConsole, msgColor);
     cout << msg;
+    SetConsoleTextAttribute(hConsole, nextColor);
+}
+
+void printRainbowMsg(int clrBase, string msg, WORD nextColor) {
+
+    int clr = clrBase;
+    
+    for (int i = 0; i < msg.length(); i++) {
+
+        SetConsoleTextAttribute(hConsole, clr);
+        clr++;
+
+        if (clr > clrBase + 5) {
+            
+            clr = clrBase;
+        }
+        
+        cout << msg[i];
+    }
+
     SetConsoleTextAttribute(hConsole, nextColor);
 }
 
