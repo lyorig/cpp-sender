@@ -25,6 +25,7 @@ int main() {
     
     
     // Základní nastavení
+    SetConsoleTitleA(chooseRandElem(titleText).c_str()); // Narrow string protože se mi nechce dìlat funkce na pøevod
     setlocale(LC_ALL, "cs_CZ");
     SetConsoleCP(1250);
     
@@ -32,7 +33,7 @@ int main() {
     cin >> ans;
 
     
-    
+    // Goto je giga cringe ale jsem líný programátor
     
     if (ans == "ano") {
 
@@ -40,7 +41,7 @@ int main() {
         printColoredMsg(WHITE, "\nProdleva mezi repeticemi (ms): ", USERINPUT);
         cin >> delay;
         
-            if (!cin) {
+            if (!cin || delay < 0 || delay > 10000) {
             
                 flushCin();
                 printColoredMsg(B_RED, "Neplatná prodleva. Zadejte jinou.\n", WHITE);
@@ -53,7 +54,7 @@ int main() {
         printColoredMsg(WHITE, "\nCodepage: ", USERINPUT);
         cin >> codepage;
 
-            if (!cin) {
+            if (!cin || codepage > 1500) {
 
                 flushCin();
                 printColoredMsg(B_RED, "Neplatný codepage. Zadejte jiný.\n", WHITE);
@@ -81,6 +82,7 @@ int main() {
     else { // Cokoliv jiného než "ano" se bere jako ne
 
         setColor(B_GREEN);
+
         cout << "\nProdleva nastavena na základní (" << delay << "ms).\n";
         cout << "Locale nastaven na základní (" << sLocale << ").\n";
         cout << "Codepage nastaven na základní (" << codepage << ").\n"; // Také lži. Ne, neplánuji s tím nic dìlat
@@ -92,7 +94,9 @@ int main() {
     setlocale(LC_ALL, sLocale.c_str());
     SetConsoleCP(codepage);
     
-    printColoredMsg(WHITE, "\n(c) Petr Šácha 2022. Podporuje diakritiku.\nPoužitím programu souhlasíte se samostatností Míkovic.\nCo chcete spamovat? -> ", USERINPUT);
+    setColor(WHITE);
+    cout << "\n(c) Petr Šácha 2022. " << chooseRandElem(splashText) << "\nPoužitím programu souhlasíte se samostatností Míkovic.\n\nCo chcete spamovat? -> ";
+    setColor(USERINPUT);
     
     flushCin();
     getline(wcin, wts);

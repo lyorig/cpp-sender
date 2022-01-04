@@ -2,13 +2,20 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <locale>
 #include <Windows.h>
+#include <time.h>
 
 using namespace std;
 
+// Promìnné
 wstring wts;
 int delay;
+
+// Arrays
+vector<string> splashText = { "Le fishe au chocolat.", "Napajedla neexistují.", "Praise Gabèa.", "Python je cringe.", "Garance špagetového kódu.", "Schváleno Kuncišem.", "Spamujte s tím Hendrycha.", "Isn't it?", "Nenávidím tento jazyk.", "Poøád stabilnìjší než Fallout 76.", "Amogus sus." };
+vector<string> titleText = { "Audacity", "Photomath", "paint.net", "Imagine", "Paint 3D", "PSDiagram", "PyCharm", "Counter-Strike: Global Offensive", "Minecraft", "Among Us", "Microsoft Excel" }; // Není wstring!
 
 void sendText() {
  
@@ -63,7 +70,7 @@ void sendText() {
 void flushCin() {
     
     cin.clear();
-    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
 void setColor(WORD msgColor) {
@@ -79,4 +86,14 @@ void printColoredMsg(WORD msgColor, string msg, WORD nextColor) {
     SetConsoleTextAttribute(hConsole, msgColor);
     cout << msg;
     SetConsoleTextAttribute(hConsole, nextColor);
+}
+
+template<typename T>
+
+T chooseRandElem(vector<T> arr) {
+  
+    srand(time(NULL));
+    int randIndex = rand() % arr.size();
+
+    return arr[randIndex];
 }
