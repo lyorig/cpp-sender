@@ -1,125 +1,122 @@
+Ôªø// Jednoduch√Ω C++ spammer. Kv≈Øli vyu≈æit√≠ wmain() mus√≠ b√Ωt v≈°echny I/O operace wide (≈°irok√©), tzn. string mus√≠ b√Ωt wstring a cin mus√≠ b√Ωt wcin.
+// P≈ôed ka≈æd√Ωm stringem mus√≠ tak√© b√Ωt prefix L (pro wide string).
+// _setmode zaji≈°≈•uje Unicode podporu, tud√≠≈æ nen√≠ nutn√© nastavovat locale a codepage.
+
+
+
+
+// Windows definice
 #define NOMINMAX
-#define SUCCESS 10
-#define FAILURE 12
-#define USERINPUT 11
-#define WHITE 15
+
+// Konstantn√≠ v√Ωrazy
+constexpr int B_BASE = 9;
+constexpr int SUCCESS = 10;
+constexpr int FAILURE = 12;
+constexpr int USERINPUT = 11;
+constexpr int WHITE = 15;
 
 #include "lyoUtil.h"
 
 using namespace std;
 
-int main() {
+int wmain() {
     
     // Seed pro rand()
     srand((unsigned int)time(NULL));
 
-    // PromÏnnÈ a jejich z·kladnÌ hodnoty
-    string ans;
-    UINT codepage = 1250;
-    string sLocale = "cs_CZ";
+    // Promƒõnn√© a jejich z√°kladn√≠ hodnoty
+    wstring ans;
     delay = 30;
 
     // Vektory
-    vector<string> splashText = { "Le fishe au chocolat.", "Napajedla neexistujÌ.", "Praise GabËa.", "30x rychlejöÌ neû Python.", "Garance öpagetovÈho kÛdu.", "Schv·leno Kunciöem.", "SmÏ¯ujte spam na lyorig#0775.", "Isn't it?", "Nen·vidÌm tento jazyk.", "Po¯·d stabilnÏjöÌ neû Fallout 76.", "Kv˘li tomuto m·m dvojku z biologie.", "Spam! nenÌ spam."};
-    vector<string> titleText = { "Audavillage", "Videomath", "paint.com", "Imagine 2", "Paint 4D", "XboxDiagram", "C++Charm", "Kyberdigi.cz", "Craftmine", "Toto !== virus" }; // UTF-8
+    vector<wstring> splashText = { L"Le fishe au chocolat.", L"Napajedla neexistuj√≠.", L"Praise Gabƒça.", L"30x rychlej≈°√≠ ne≈æ Python.", L"Garance ≈°pagetov√©ho k√≥du.", L"Schv√°leno Kunci≈°em.", L"Smƒõ≈ôujte spam na lyorig#0775.", L"Isn't it?", L"Nen√°vid√≠m tento jazyk.", L"Po≈ô√°d stabilnƒõj≈°√≠ ne≈æ Fallout 76.", L"Kv≈Øli tomuto m√°m dvojku z biologie.", L"Spam! nen√≠ spam."};
+    vector<wstring> titleText = { L"Audavillage", L"Videomath", L"paint.com", L"Imagine 2", L"Malov√°n√≠ 4D", L"XboxDiagram", L"C++Charm", L"Kyberdigi", L"Craftmine", L"Windows Defender" };
     
-    // Z·kladnÌ nastavenÌ
-    SetConsoleTitleA(chooseRandElem(titleText).c_str());
-    setlocale(LC_ALL, "cs_CZ");
-    SetConsoleCP(1250);
-    
-    setColor(WHITE);
+    // Z√°kladn√≠ nastaven√≠
+    SetConsoleTitleW(ChooseRandElem(titleText).c_str());
+    SetColor(WHITE);
 
-    cout << "(c) Petr ä·cha 2022. ";
-    printColoredMsg(false, USERINPUT, chooseRandElem(splashText), WHITE);
-    cout << "\nPouûitÌm Ëi modifikacÌ programu souhlasÌte se samostatnostÌ MÌkovic.\n\n";
-    printColoredMsg(false, WHITE, "Chcete upravit nastavenÌ? (ano/ne): ", USERINPUT);
-    cin >> ans;
+    (void)_setmode(_fileno(stdout), _O_U16TEXT); // Oba jsou castovan√© na void proto≈æe jinak Visual Studio h√°z√≠
+    (void)_setmode(_fileno(stdin), _O_U16TEXT);  // varov√°n√≠ o ignorov√°n√≠ vratn√© hodnoty (kterou stejnƒõ nevyu≈æiju)
+
 
 
     
+    wcout << L"(c) Petr ≈†√°cha 2022. ";
+
+    PrintColoredMsg(false, USERINPUT, ChooseRandElem(splashText), WHITE);
+
+    wcout << L"\nPou≈æit√≠m ƒçi modifikac√≠ programu souhlas√≠te se samostatnost√≠ M√≠kovic.\n\n";
+
+    PrintColoredMsg(false, WHITE, L"Chcete upravit nastaven√≠? (ano/ne): ", USERINPUT);
+
+    wcin >> ans;
+
+
     
-    // Goto je giga cringe ale jsem lÌn˝ program·tor
-    if (ans == "ano") {
+    
+    // Goto je giga cringe ale jsem l√≠n√Ω program√°tor
 
-    Q1A:
-        printColoredMsg(false, WHITE, "\nProdleva mezi repeticemi (ms): ", USERINPUT);
-        cin >> delay;
+    if (ans == L"ano") {
 
-        if (!cin || delay < 0 || delay > 10000) {
+    Q1:
+        PrintColoredMsg(false, WHITE, L"\nProdleva mezi repeticemi (ms): ", USERINPUT);
+        wcin >> delay;
 
-            printColoredMsg(false, FAILURE, "Neplatn· prodleva. Zadejte jinou.\n", WHITE);
-            flushCin();
-            goto Q1A;
+        if (!wcin || delay < 0 || delay > 10000) {
+
+            PrintColoredMsg(false, FAILURE, L"Neplatn√° prodleva. Zadejte jinou.\n", WHITE);
+            FlushCinW();
+            goto Q1;
         }
 
 
     
-    Q1B:
-        printColoredMsg(false, WHITE, "\nProdleva mezi stiskem a odesl·nÌm kl·vesy (ms): ", USERINPUT);
-        cin >> inbDelay;
-
-        if (!cin || inbDelay < 0 || inbDelay > 1000) {
-
-            printColoredMsg(false, FAILURE, "Neplatn· prodleva. Zadejte jinou.\n", WHITE);
-            flushCin();
-            goto Q1B;
-        }
-
-
-
     Q2:
-        printColoredMsg(false, WHITE, "\nCodepage: ", USERINPUT);
-        cin >> codepage;
+        PrintColoredMsg(false, WHITE, L"\nProdleva mezi stiskem a odesl√°n√≠m kl√°vesy (ms): ", USERINPUT);
+        wcin >> inbDelay;
 
-        if (!cin || codepage > 1500) {
+        if (!wcin || inbDelay < 0 || inbDelay > 1000) {
 
-            printColoredMsg(false, FAILURE, "Neplatn˝ codepage. Zadejte jin˝.\n", WHITE);
-            flushCin();
+            PrintColoredMsg(false, FAILURE, L"Neplatn√° prodleva. Zadejte jinou.\n", WHITE);
+            FlushCinW();
             goto Q2;
         }
 
 
-
-    Q3:
-        printColoredMsg(false, WHITE, "\nLocale: ", USERINPUT);
-        cin >> sLocale;
-
-        if (!cin || sLocale.length() < 4 || sLocale.length() > 10) { // Locale m˘ûe b˝t i 10 znak˘ dlouh˝, tak pro jistotu
-
-            printColoredMsg(false, FAILURE, "Neplatn˝ locale. Zadejte jin˝.\n", WHITE);
-            flushCin();
-            goto Q3;
-        }
-
-        printColoredMsg(false, SUCCESS, "\nNastaveno.\n", WHITE); // Leû! P¯ece to bude nastaveno aû o nÏkolik ¯·dk˘ pozdÏji
+        
+        PrintColoredMsg(false, SUCCESS, L"\nNastaveno.\n", WHITE);
     }
 
 
 
-    else { // Cokoliv jinÈho neû "ano" se bere jako ne
+    else { // Cokoliv jin√©ho ne≈æ "ano" se bere jako ne
 
-        setColor(SUCCESS);
+        SetColor(SUCCESS);
 
-        cout << "\nProdleva nastavena na doporuËenou (" << delay << "ms).\n";
-        cout << "Prodleva mezi stiskem a odesl·nÌm kl·vesy nastavena na doporuËenou (" << inbDelay << "ms).\n";
-        cout << "Locale nastaven na doporuËen˝ (" << sLocale << ").\n";
-        cout << "Codepage nastaven na doporuËen˝ (" << codepage << ").\n"; // DalöÌ lûi! Tyto jsou alespoÚ o hodnÏ ¯·dk˘ blÌû
+        wcout << L"\nProdleva nastavena na doporuƒçenou (" << delay << "ms).\n";
+        wcout << L"Prodleva mezi stiskem a odesl√°n√≠m kl√°vesy nastavena na doporuƒçenou (" << inbDelay << "ms).\n";
     }
 
-    setlocale(LC_ALL, sLocale.c_str());
-    SetConsoleCP(codepage);
 
-    printColoredMsg(false, WHITE, "\nCo chcete spamovat? -> ", USERINPUT);
+
+    PrintColoredMsg(false, WHITE, L"\nCo chcete spamovat? -> ", USERINPUT);
     
-    flushCin();
+    FlushCinW();
     getline(wcin, wts);
 
-    printColoredMsg(false, SUCCESS, "\nP¯ipraveno. Drûte F12 pro spam.", WHITE);
+    PrintColoredMsg(false, SUCCESS, L"\nP≈ôipraveno. Dr≈æte F12 pro spam.", WHITE);
+    
+
+
+    // DEBUG Z√ìNA
+
     
     
-    
-    
+    // KONEC DEBUG Z√ìNY
+
+
+
     while(true) {
         
         if (GetKeyState(VK_F12) & 0x8000) {

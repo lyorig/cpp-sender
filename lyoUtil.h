@@ -6,7 +6,9 @@
 #include <locale>
 #include <limits>
 #include <Windows.h>
+#include <fcntl.h>
 #include <time.h>
+#include <io.h>
 
 using namespace std;
 
@@ -72,19 +74,23 @@ void sendText() {
     Sleep(delay);
 }
 
-void flushCin() {
+// Použijte pøed getline, pokud ho nìkdy pøecházel wcin.
+
+void FlushCinW() {
     
-    cin.clear();
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    wcin.clear();
+    wcin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-void setColor(WORD msgColor) {
+// Usnadní práci jen trochu, ale i tak je užiteèná.
+
+void SetColor(WORD msgColor) {
     
     SetConsoleTextAttribute(hConsole, msgColor); // Jen v cmd prostøedí!
 }
 
 
-void printColoredMsg(bool isRainbow, int clrBase, string msg, WORD nextColor) {
+void PrintColoredMsg(bool isRainbow, int clrBase, wstring msg, WORD nextColor) {
 
     // isRainbow - Má to být duhové?
     // clrBase - V pøípadì jednobarevného urèuje barvu, v pøípadì duhového urèuje základnu
@@ -99,7 +105,7 @@ void printColoredMsg(bool isRainbow, int clrBase, string msg, WORD nextColor) {
             SetConsoleTextAttribute(hConsole, clr);
             clr++;
 
-            if (clr > clrBase + 5) {
+            if (clr > clrBase + 6) {
 
                 clr = clrBase;
             }
@@ -110,13 +116,16 @@ void printColoredMsg(bool isRainbow, int clrBase, string msg, WORD nextColor) {
     else {
         
         SetConsoleTextAttribute(hConsole, clrBase);
-        cout << msg;
+        wcout << msg;
     }
     SetConsoleTextAttribute(hConsole, nextColor);
 }
 
+// Tato funkce je plnì automatizovaná - vektor mùže mít jakýkoliv
+// typ a velikost, a ChooseRandElem to pøijme díky templatu
+
 template<typename T>
-T chooseRandElem(vector<T> &arr) {
+T ChooseRandElem(vector<T> &arr) {
        
     int randIndex = rand() % arr.size();
 
