@@ -1,22 +1,23 @@
 #pragma once
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <locale>
-#include <limits>
-#include <Windows.h>
-#include <fcntl.h>
-#include <time.h>
-#include <io.h>
+#define NOMINMAX // Windows.h má svoji vlastní definici MAX, tu musíme zrušit, jinak by nefungoval flushCin.
+
+#include <iostream>   // wcin, wstring
+#include <vector>     // vektory
+#include <string>     // getline
+#include <locale>     // setlocale
+#include <limits>     // numeric_limits
+#include <random>     // random_device, mt19937
+#include <Windows.h>  // wmain, SendInput, SetConsoleTextAttribute
 
 using namespace std;
 
-// Promìnné
-wstring wts;
-int delay = 30;
-int inbDelay = 0;
+// Promìnné a jejich základní hodnoty
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+wstring wts;
+unsigned short delay = 30;
+unsigned short inbDelay = 0;
+
 
 
 
@@ -27,7 +28,7 @@ void sendText() {
     enter.type = INPUT_KEYBOARD;
     enter.ki.dwFlags = 0;
 
-    for (int i = 0; i < wts.length(); i++) {
+    for (short i = 0; i < wts.length(); i++) {
 
         HKL myKL = GetKeyboardLayout(0);
         SHORT scan = VkKeyScanExW(wts[i], myKL);
@@ -74,60 +75,52 @@ void sendText() {
     Sleep(delay);
 }
 
-// Použijte pøed getline, pokud ho nìkdy pøecházel wcin.
 
-void FlushCinW() {
+
+
+// Nutné pøed každým getline.
+
+void flushCin() {
     
     wcin.clear();
     wcin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-// Usnadní práci jen trochu, ale i tak je užiteèná.
-
-void SetColor(WORD msgColor) {
-    
-    SetConsoleTextAttribute(hConsole, msgColor); // Jen v cmd prostøedí!
-}
 
 
-void PrintColoredMsg(bool isRainbow, int clrBase, wstring msg, WORD nextColor) {
 
-    // isRainbow - Má to být duhové?
-    // clrBase - V pøípadì jednobarevného urèuje barvu, v pøípadì duhového urèuje základnu
-    // msg - Co bude zbarvené a cout-ované?
-    // nextColor - Jaká barva bude nastavena po dokonèení?
-    
-    if (isRainbow == true) {
-        int clr = clrBase;
 
-        for (int i = 0; i < msg.length(); i++) {
+// Ohavná funkce, zatím ale nemám na výbìr, pokud chci opravit tu resetující se barvu textu...
+// Nìkdy(!) z toho udìlám Win32 aplikaci, to by mi snad mohlo nìjak usnadnit život.
 
-            SetConsoleTextAttribute(hConsole, clr);
-            clr++;
+void printColoredMsg(WORD clrBase, wstring msg, WORD nextColor = 0) { // nextColor neni povinný parametr.
 
-            if (clr > clrBase + 6) {
+    for (short i = 0; i < msg.length(); i++) {
 
-                clr = clrBase;
-            }
-
-            cout << msg[i];
-        }
-    }
-    else {
-        
         SetConsoleTextAttribute(hConsole, clrBase);
-        wcout << msg;
+
+        wcout << msg[i];
+
+        #ifndef LYONOSLEEP
+            Sleep(1);
+        #endif
     }
-    SetConsoleTextAttribute(hConsole, nextColor);
+    
+    if (nextColor != 0) { SetConsoleTextAttribute(hConsole, nextColor); } // užiteèné pro nastavení samostatné barvy pro (w)cin/getline.
 }
 
-// Tato funkce je plnì automatizovaná - vektor mùže mít jakýkoliv
-// typ a velikost, a ChooseRandElem to pøijme díky templatu
+
+
+
+// "If it ain't broke, don't fix it." Slyšeli jste nìkdy toto rèení? Já ne,
+// teï je to zase broke a nemám ponìtí jak to opravit.
 
 template<typename T>
-T ChooseRandElem(vector<T> &arr) {
-       
-    int randIndex = rand() % arr.size();
+wstring rIndex(T &vec) {
+    
+    random_device rDevice;
+    mt19937 rGen(rDevice());
+    uniform_int_distribution<> rDist(0, vec.size() - 1);
 
-    return arr[randIndex];
+    return vec[rDist(rGen)].c_str();
 }

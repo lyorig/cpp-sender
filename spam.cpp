@@ -1,127 +1,125 @@
-ï»¿// JednoduchÃ½ C++ spammer. KvÅ¯li vyuÅ¾itÃ­ wmain() musÃ­ bÃ½t vÅ¡echny I/O operace wide (Å¡irokÃ©), tzn. string musÃ­ bÃ½t wstring a cin musÃ­ bÃ½t wcin.
-// PÅ™ed kaÅ¾dÃ½m stringem musÃ­ takÃ© bÃ½t prefix L (pro wide string).
-// _setmode zajiÅ¡Å¥uje Unicode podporu, tudÃ­Å¾ nenÃ­ nutnÃ© nastavovat locale a codepage.
+// Celkem jednoduchá aplikace na spamování Vámi vybraného textu. Podporuje Unicode. Teda, mìla by.
+// Všechny I/O operace musí mít pøedponu w (wide - široké, nutné pro Unicode) a všechny stringy musí mít pøedponu L (long - také nutné pro Unicode).
+// Z nìjakého dùvodu wide funkce zpùsobují to, e se text v náhodném bodì zmìní zpìt na základní barvu (7). Proto se text naèítá postupnì.
+// Pokud se mi nebudou chtít pøekládat nìjaké vırazy z angliètiny, prostì je tak nechám.
 
-
-
-
-// Windows definice
-#define NOMINMAX
-
-// KonstantnÃ­ vÃ½razy
-constexpr int B_BASE = 9;
-constexpr int SUCCESS = 10;
-constexpr int FAILURE = 12;
-constexpr int USERINPUT = 11;
-constexpr int WHITE = 15;
+// #define LYONOSLEEP
+#define SUCCESS 10
+#define FAILURE 12
+#define USERINPUT 11
+#define WHITE 15
 
 #include "lyoUtil.h"
 
 using namespace std;
 
+
+
+
 int wmain() {
-    
-    // Seed pro rand()
-    srand((unsigned int)time(NULL));
 
-    // PromÄ›nnÃ© a jejich zÃ¡kladnÃ­ hodnoty
+    // Variables
     wstring ans;
-    delay = 30;
 
-    // Vektory
-    vector<wstring> splashText = { L"Le fishe au chocolat.", L"Napajedla neexistujÃ­.", L"Praise GabÄa.", L"30x rychlejÅ¡Ã­ neÅ¾ Python.", L"Garance Å¡pagetovÃ©ho kÃ³du.", L"SchvÃ¡leno KunciÅ¡em.", L"SmÄ›Å™ujte spam na lyorig#0775.", L"Isn't it?", L"NenÃ¡vidÃ­m tento jazyk.", L"PoÅ™Ã¡d stabilnÄ›jÅ¡Ã­ neÅ¾ Fallout 76.", L"KvÅ¯li tomuto mÃ¡m dvojku z biologie.", L"Spam! nenÃ­ spam."};
-    vector<wstring> titleText = { L"Audavillage", L"Videomath", L"paint.com", L"Imagine 2", L"MalovÃ¡nÃ­ 4D", L"XboxDiagram", L"C++Charm", L"Kyberdigi", L"Craftmine", L"Windows Defender" };
+
+
+
+    // Arrays
+    const vector<wstring> splashText = { L"Le fishe au chocolat.", L"Napajedla neexistují.", L"Praise Gabèa.", L"30x rychlejší ne Python!", L"Garance špagetového kódu.", L"Schváleno Jakubem Kuncem.", L"Smìøujte spam na lyorig#0775.", L"Isn't it?", L"Nenávidím tento jazyk.", L"Poøád stabilnìjší ne Fallout 76.", L"Kvùli tomuto mám dvojku z biologie.", L"Spam! není spam.", L"Drei aktivitäten.", L"Mám vás všechny uloené.", L"\"Beate, telefon!\"", L"Brzy na OnlyFans(tm).", L"Hör zu und ergänze den Dialog."};
+    const vector<wstring> titleText = { L"Audavillage", L"Videomath", L"paint.com", L"Imagine 2", L"Malování 4D", L"XboxDiagram", L"C++Charm", L"Kyberdigi", L"Bing Chilling", L"Toto != virus", L"hek.ekse", L"já kdy", L"hendrych je gay", L"Capybara therapy (CBT)", L"Postrach Defenderu", L"cmd > Win32", L"Václav Moravec", L"h"};
     
-    // ZÃ¡kladnÃ­ nastavenÃ­
-    SetConsoleTitleW(ChooseRandElem(titleText).c_str());
-    SetColor(WHITE);
-
-    (void)_setmode(_fileno(stdout), _O_U16TEXT); // Oba jsou castovanÃ© na void protoÅ¾e jinak Visual Studio hÃ¡zÃ­
-    (void)_setmode(_fileno(stdin), _O_U16TEXT);  // varovÃ¡nÃ­ o ignorovÃ¡nÃ­ vratnÃ© hodnoty (kterou stejnÄ› nevyuÅ¾iju)
-
-
+    
 
     
-    wcout << L"(c) Petr Å Ã¡cha 2022. ";
+    // Basic settings
+    SetConsoleTitle(rIndex(titleText).c_str()); // Pokud to chce LPCWSTR, pouijte c_str().
 
-    PrintColoredMsg(false, USERINPUT, ChooseRandElem(splashText), WHITE);
+    setlocale(LC_ALL, "");
 
-    wcout << L"\nPouÅ¾itÃ­m Äi modifikacÃ­ programu souhlasÃ­te se samostatnostÃ­ MÃ­kovic.\n\n";
+    
 
-    PrintColoredMsg(false, WHITE, L"Chcete upravit nastavenÃ­? (ano/ne): ", USERINPUT);
+    
+    printColoredMsg(WHITE, L"(c) Petr Šácha 2022. ");
 
+    printColoredMsg(USERINPUT, rIndex(splashText));
+
+    printColoredMsg(WHITE, L"\nPouitím èi modifikací programu souhlasíte se samostatností Míkovic.\n\n");
+
+    printColoredMsg(WHITE, L"Chcete ponechat doporuèené nastavení? (ano/ne): ", USERINPUT);
+
+    InitialQ:
     wcin >> ans;
 
-
     
     
-    // Goto je giga cringe ale jsem lÃ­nÃ½ programÃ¡tor
 
-    if (ans == L"ano") {
-
-    Q1:
-        PrintColoredMsg(false, WHITE, L"\nProdleva mezi repeticemi (ms): ", USERINPUT);
+    // Goto je sice giga cringe, ale jsem línı programátor.
+    if (ans == L"ne") {
+    
+        printColoredMsg(WHITE, L"\nProdleva mezi repeticemi (ms): ", USERINPUT);
+    
+        Delay1:
         wcin >> delay;
 
         if (!wcin || delay < 0 || delay > 10000) {
 
-            PrintColoredMsg(false, FAILURE, L"NeplatnÃ¡ prodleva. Zadejte jinou.\n", WHITE);
-            FlushCinW();
-            goto Q1;
+            printColoredMsg(FAILURE, L"Neplatná prodleva. Zadejte jinou: ", USERINPUT);
+            flushCin();
+
+            goto Delay1;
         }
 
-
+        printColoredMsg(WHITE, L"\nProdleva mezi stiskem a odesláním klávesy (ms): ", USERINPUT);
     
-    Q2:
-        PrintColoredMsg(false, WHITE, L"\nProdleva mezi stiskem a odeslÃ¡nÃ­m klÃ¡vesy (ms): ", USERINPUT);
+        Delay2:
         wcin >> inbDelay;
 
         if (!wcin || inbDelay < 0 || inbDelay > 1000) {
 
-            PrintColoredMsg(false, FAILURE, L"NeplatnÃ¡ prodleva. Zadejte jinou.\n", WHITE);
-            FlushCinW();
-            goto Q2;
+            printColoredMsg(FAILURE, L"Neplatná prodleva. Zadejte jinou: ", USERINPUT);
+            flushCin();
+
+            goto Delay2;
         }
+    }
 
 
+
+
+    else if (ans == L"ano") {
+
+        printColoredMsg(SUCCESS, L"Základní nastavení ponechány.\n");
+    }
+
+    else {
         
-        PrintColoredMsg(false, SUCCESS, L"\nNastaveno.\n", WHITE);
+        printColoredMsg(FAILURE, L"Neplatná odpovìï. Zadejte ano/ne: ", USERINPUT);
+
+        goto InitialQ;
     }
 
-
-
-    else { // Cokoliv jinÃ©ho neÅ¾ "ano" se bere jako ne
-
-        SetColor(SUCCESS);
-
-        wcout << L"\nProdleva nastavena na doporuÄenou (" << delay << "ms).\n";
-        wcout << L"Prodleva mezi stiskem a odeslÃ¡nÃ­m klÃ¡vesy nastavena na doporuÄenou (" << inbDelay << "ms).\n";
-    }
-
-
-
-    PrintColoredMsg(false, WHITE, L"\nCo chcete spamovat? -> ", USERINPUT);
     
-    FlushCinW();
+    
+    
+    printColoredMsg(WHITE, L"\nCo chcete spamovat? -> ", USERINPUT);
+    
+    flushCin();
     getline(wcin, wts);
 
-    PrintColoredMsg(false, SUCCESS, L"\nPÅ™ipraveno. DrÅ¾te F12 pro spam.", WHITE);
+    printColoredMsg(SUCCESS, L"Pøipraveno. Drte F12 pro spam.");
     
 
 
-    // DEBUG ZÃ“NA
-
     
-    
-    // KONEC DEBUG ZÃ“NY
-
-
-
     while(true) {
         
         if (GetKeyState(VK_F12) & 0x8000) {
+            
             sendText();
-        }  
+        }
     }
+    
+    fflush(stdout);
+    
     return 0;
 }
